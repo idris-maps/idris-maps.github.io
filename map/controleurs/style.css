@@ -1,0 +1,46 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+html, body, #map {
+    height: 100%;
+}
+
+#stop-days, #stop-lines { width: 100%; }
+
+#stop-clocks, #stop-clocks-leg {
+	width: 100%;
+	display: table;
+}
+
+#stop-clock-1, #stop-clock-2, .stop-clock-text {
+	width: 50%;
+	display: table-cell;
+}
+
+.stop-clock-text p {
+	width: 100%;
+	margin: auto;
+	text-align: center;
+	font-size: 0.8em
+}
+
+.line-graph, .line-name {
+	padding: 0;
+	margin: 0;
+}
+
+div#a-propos {
+	position:fixed;
+	top:20px;
+	right:20px;
+	background-color:white;
+	padding: 5px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 1.2em;
+	font-weight: bold;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+
+a { text-decoration: none; color: #fd8d3c }

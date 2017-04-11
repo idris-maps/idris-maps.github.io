@@ -1,0 +1,33 @@
+* { box-sizing: border-box; }
+html, body { padding: 0; margin: 0; font-family: arial, helvetica, sans-serif; font-size: 16px; } 
+html, body { height: 100vh; width: 100vw; }
+#header { width: 100%; background-color: #29606F; padding: 10px; }
+#header img { height: 50px; width: auto; }
+#map { width: 100vw; height: 200px; z-index: 0 }
+#menu { position: fixed; background-color: white; z-index: 1000; padding: 10px; color: #29606F}
+#menu select,
+#menu button,
+#menu input,
+#menu p { width: 100%; }
+#menu p.title { text-align: center; font-weight: bold; }
+#attrib { width: 100%; text-align: center; font-size: 0.7em; }
+#attrib a { color: inherit; }
+select, button, input { 
+	padding: 6px 12px; line-height: 1.5; cursor: pointer;
+	font-size: 16px; margin-top: 5px; border: 1px solid #29606F;
+	font-family: inherit;
+}
+select { background-color: #e4ecf0; color: #29606F; border-radius: 4px; }
+button { background-color: #437380; color: white;  }
+button:hover { background-color: white; color: #437380; }
+input { background-color: white; color: #437380; border-radius: 4px; }
+
+@media (max-width: 750px) {
+	#menu { bottom: 0px; width: 100%; }
+	#menu div:first-child { width: 300px; margin: auto; }
+	select { max-height: 50px; }
+}
+@media (min-width: 750px) {
+	#menu { top: 0px; right: 0px; width: 300px; height: 100%; }
+}
+

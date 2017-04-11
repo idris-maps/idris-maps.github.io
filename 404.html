@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>404</title>
+	<style>
+body { background-color: #29606F; color: white; font-family: arial,helvetica,sans-serif }
+html, body, #page { width: 100%; }
+#page { text-align: center; }
+#n404 { font-size: 10em; }
+a { text-decoration: none; color: inherit; font-weight: bold; }
+	</style>
+
+</head>
+<body>
+<div id="page">
+	<p id="n404">404</p>
+	<p id="redirect">If you are not redirected automatically, <a href='http://www.idris-maps.com'>click here</a>.</p>
+</div>
+</body>
+</html>
+<script>
+	window.onload = function() {
+		setTimeout(function() {
+			window.location.href = 'http://www.idris-maps.com'
+		},1000)
+	}
+</script>
