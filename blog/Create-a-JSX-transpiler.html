@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+  
+    <html lang="en">
+      <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Idris maps">
+    <meta name="description" content="Create a JSX transpiler with Typescript in order to have the IDE and compiler tell you which elements and properties are allowed.">
+    <meta name="keywords" content="JSX, transpiler, typescript, pragma, h function">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta property="og:image" content="undefined">
+    <meta property="og:description" content="Create a JSX transpiler with Typescript in order to have the IDE and compiler tell you which elements and properties are allowed.">
+    <meta property="og:title" content="Create a JSX transpiler">
+    <meta name="twitter:title" content="Create a JSX transpiler">
+    <link rel="shortcut icon" href="favicon.ico">
+    <title>Create a JSX transpiler</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../prism.css">
+    <script type="application/ld+json">{"@type":"BlogPosting","alternativeHeadline":"Create a JSX transpiler with Typescript in order to have the IDE and compiler tell you which elements and properties are allowed.","articleBody":"# Create a JSX transpiler\n\nJSX or JavaScript XML is not part of javascript but can be compiled to the language. It is mostly famous for being used with virtual DOM libraries like `react`. But it can be used for anything. The base for this experiment is [WTF is JSX](https://jasonformat.com/wtf-is-jsx/) by Jason Miller, the creator of `preact`. That is the only introduction to JSX you will ever need. This article focuses on using it with typescript (he uses babel) in order to get type checking. The main take away is that the following JSX:\n\n```jsx\n/** @jsx h */\nlet foo = <div id=\"foo\">Hello!</div>\n```\n\ntranspiles into:\n\n```js\nvar foo = h('div', {id:\"foo\"}, 'Hello!')\n```\n\nCreating a JSX transpiler is a matter of defining `h`.\n\n`/** @jsx h */`, the \"pragma\", tells the compiler which `h` function to use.\n\n## Setup\n\nCreating a `test.tsx` file:\n\n```tsx\nconst jsx = <text attribute=\"foo\">bar</text>\n```\n\nTypescript complains: `Cannot use JSX unless the '--jsx' flag is provided`. We can set `\"jsx\": \"preserve\"` in `tsconfig.json`, to make the error disappear. But if we run the compiler, `npx tsc`, the resulting `test.jsx` looks the same. That is what `\"preserve\"` does, typescript just creates a `.jsx` file.\n\nAccording to the [docs](https://www.typescriptlang.org/docs/handbook/jsx.html#basic-usage), other possible values for `\"jsx\"` are `\"react\"` and `\"react-native\"`. Using the first, typescript has a new complaint: `Cannot find name 'React'`. With the pragma, typescript says: `Cannot find name 'h'` but it does create `test.js`:\n\n```js\n\"use strict\";\n/** @jsx h */\nvar jsx = h(\"text\", { attribute: \"foo\" }, \"bar\");\n```\n\nLooks good. Time to create `h.ts`:\n\n```ts\nexport default (...args) => console.log(args)\n```\n\nImporting it into `test.tsx` under the pragma, the compiler is happy. If we run `npx ts-node test.tsx`, it logs:\n\n```json\n[ \"text\", { \"attribute\": \"foo\" }, \"bar\" ]\n```\n\nNow all you have to do is make `h` do something more useful than logging.\n\n## JSX types\n\nWhen I said that typescript is not complaining, that was because I had `\"noImplicitAny\": false` in `tsconfig.json`. We need to set that to `true`.\n\nNow we get a `JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists` error. Let's create `jsx.d.ts`:\n\n```ts\ndeclare namespace JSX {\n  interface IntrinsicElements {\n    [key: string]: any\n  }\n}\n```\n\nThe compiler is happy. But this does not give us any type checking because we are saying that any element goes with any property (`[key: string]: any`).\n\nIf we only allow the element `<text>` with a required property `attribute`:\n\n```ts\ndeclare namespace JSX {\n  interface IntrinsicElements {\n    text: {\n      attribute: string\n    }\n  }\n}\n```\n\n```jsx\n<text attribute=\"foo\">bar</text>\n```\n\nis valid. But:\n\n```jsx\n<text attribute={1}>bar</text>\n```\n\ngets a `Type 'number' is not assignable to type 'string'` error.\n\n```jsx\n<text>bar</text>\n```\n\n`Property 'attribute' is missing in type '{}' but required in type '{ attribute: string; }'`\n\n```jsx\n<hello>World</hello>\n```\n\n`Property 'hello' does not exist on type 'JSX.IntrinsicElements'`\n\n...and so on. We have proper type checking for our JSX.\n\n## Publishing with types\n\nYou have created a useful `h` function and the types for all possible base elements that it understands. Time to publish. I am not going to lie, this is the part that took me the most time. And gave me the biggest headache. The purpose of this post is to avoid going through this next time. And maybe save you a couple of hours.\n\nI will not go through all my different failed attempts. I ended up having a look at the [preact types](https://github.com/preactjs/preact/blob/master/src/index.d.ts) for inspiration.\n\nThe solution was to not let typescript create the types automatically by setting `\"declaration\"` to `false` in `tsconfig` and write the types by hand.\n\nFirst export the JSX namespace in `jsx.d.ts` as JSXInternal, like this:\n\n```ts\nexport namespace JSXInternal {\n  interface IntrinsicElements {\n    text: {\n      attribute: string\n    }\n  }\n}\n```\n\nAnd create `types.d.ts` in the `dist` folder with:\n\n```tsx\nexport = myLibrary\nexport as namespace myLibrary\n\nimport { JSXInternal } from './jsx'\n\ndeclare namespace myLibrary {\n  export import JSX = JSXInternal\n  interface Whatever { /* whatever your h returns */ }\n  function h(data: any): Whatever\n  namespace h {\n    export import JSX = JSXInternal\n  }\n}\n```\n\nDon't forget to copy `jsx.d.ts` to the `dist` folder. And add `\"types\": \"dist/types.d.ts\"` to `package.json`.\n\nYou are ready to publish your JSX transpiler with type checking. I made [pdfmakejsx](https://www.npmjs.com/package/pdfmakejsx).\n\nHave fun.\n","author":{"@type":"Person","name":"Idris maps","url":"http://idris-maps.com/","sameAs":["https://github.com/idris-maps","https://medium.com/@idris.maps","https://observablehq.com/@idris-maps","https://twitter.com/idrismaps","https://www.npmjs.com/~idris-maps"]},"dateCreated":"2019-08-23","dateModified":"2019-08-23","datePublished":"2019-08-23","headline":"Create a JSX transpiler","inLanguage":"en","keywords":["JSX","transpiler","typescript","pragma","h function"],"mainEntityOfPage":"True","url":"http://www.idris-maps.com/Create-a-JSX-transpiler"}</script>
+  </head>
+      <body>
+        <header>
+    <a href="http://www.idris-maps.com">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+        <g transform="matrix(.84138 0 0 .86313 49.9 51)" fill="none">
+          <ellipse ry="55.6" rx="57" cy="-1.1" cx=".2" fill="gray"/>
+          <path d="M-47.7-15.6c3.9-11.6 22.6-45.2 64.2-32.9A54.1 54.1 0 0 1 50.8 1.7l-2.3.5c-.4 4-.4 8.3-1.9 11.5.3 2-.8 3.1-1.7 4.4l-2 6.2c-1.5 2.2-3 3.7-4.4 4.6-2-2-2.4-4.4-2.7-6.8.4-1.3-6.6-2.8-6.2-5.8-1.6-.8-2.3.5-3.7.2.3-1-.6-1.8-2.6-2.4-2 .4.3-3-6.3-2.3-.9 0-2.2-6.5-7.5-2.4-11.4-7.8-4.6 8.2-2.4 14.9.4.8-2.1 2-.8 3.4.4.7-5 1.7-5.8 1-1.1-1.1-1.4-4-3-3.5-2.2-1.3-3-.2-3.3 1.8 0 1.7-1 2.8-1.6 4 1.3.7 3.9-.3 5.5.8.6-.7 2.1-1.4 6-1.8 3.8.1 3.2-2 4-3.6.2-2.4 3.8-3.2 4.8-6.3.3.4.5-1.2 1 3 1.3-.2.5-2.9 2-2 1.5 1.7-3.9-3.6 4.3 13.7.8 1 1 0 1.3-.2-3.6-6.3-1.9-6-2.7-8.8-1.4-1.6-.5-1.9.1-2.4 1.9.3 1.6 1.4 2 2.3.2-1.8 1.4-1 2.3-1-1 .5-1.8 1.1-1.2 2.4 1.7.1 2 1 2.8 1.6l.1 1.6c1.2.2.8-.7 1-1.1.7 1.3 2.1 0 3.4-.2 1.6.4 3 1 5.7.3 4.6.3 1.2 2.2 1.4 3.3-1.5 1.3-3 2.8-4.6 2.8-1.2-.1-3.2.8-3.5-1-.3-2.7-1.2-2.2-2.3.3-1 1.6-.8 3-1 4.4-2 2-3.4 3.2-2.8.6 0-1 1.7-2.7-1.8-2-2.2 1.1-4.4 1.6-6.5 2.2-1.2-.3-3-1.6-3.1-.3-2-1.4-3.8 1.3-5.7 2.3-4.2 1.3-9-2.9-9.5.5 0 1.2-.4 2.3 3.3 2.8 2 1.2 3 2.6 3.5 4.2-8.5.3-16.3-2.2-17.7-3.8-7.5-5.2-2.3-5.7-6.7-6.6-2.9-.8 1.7-1-4.4-2.7-2.7-.7-3.5-3.6-4.5-5.5-3.4-.2-2.3-1.8-7.1-2.3-.8-.3-3.8-3-3.5-5-.3-1.6 0-3.4-2.2-4-1.6-1 1.3-4-.5-4.4-.2 1-.3 2.5-2 1-.4-2.5.8-1.5 1.7-1.2.6-.5 0-1.1-.3-1.8-1.2-1-2.3-2-2.3-2.7A47 47 0 0 1-44-3.2c1.3-.3 1.9-.2 3.7-1.3 1.2 0 1.3.5 3.3-.9 2.5.8 5.1 1.6 8.4.4 2-1.6 2.8-5.3 6.7-3 3 1.6 3.3-1 5.2.6 1.6.4 5.3-2.9 5 1.4 1 1.3 2 1.9 2.4 4 1.7.2.3 2.4 4 6a4 4 0 0 0 2 2C-2.2.8-6.8-3.7-8.6-8.5c-2-4.5 1.8-2 3.3-2.1a7 7 0 0 1 5.8.1c1.8.2 3.9 0 3.3 3C3.4-4.7 4-2 2.4.3c-.8 1 0 1.8 1.2 2.5 1.9-.4 3.3 1.2 4.8 3 .6-.2 1-1 1.4-1.8-.3-2-1.4-2.1-2.3-2.8C6.3.5 6.4-.1 6.8-1.3 7.8-5 5-9.3 6-13c0-.7-4.4-7.6-5.6-7.6-4.9-2.6-7-2-9-1-2 .4-4.2 1.2-6-.1-3.6-.3-7-.4-10.5.7-3.9 1-8.3.6-11.5 3.4l-5.5 2c-2 .6-3.9.8-5.6.1z" fill="#e6e6e6" stroke="none"/>
+          <path d="M-43-37.4A54.6 54.6 0 0 0-57-1.1 56.3 56.3 0 0 0 0 54.5c20.3 0 38-10.3 48.1-25.8C-5.4 42.8-41 19.7-43-37.4z" opacity=".2" fill="#000" stroke="none"/>
+        </g>
+      </svg>
+    </a>
+  </header>
+        
+  <div class="blog-content">
+  <p class="blog-date">2019-08-23</p>
+  <h1 id="create-a-jsx-transpiler">Create a JSX transpiler</h1>
+<p>JSX or JavaScript XML is not part of javascript but can be compiled to the language. It is mostly famous for being used with virtual DOM libraries like <code>react</code>. But it can be used for anything. The base for this experiment is <a href="https://jasonformat.com/wtf-is-jsx/">WTF is JSX</a> by Jason Miller, the creator of <code>preact</code>. That is the only introduction to JSX you will ever need. This article focuses on using it with typescript (he uses babel) in order to get type checking. The main take away is that the following JSX:</p>
+<pre><code class="language-jsx"><span class="token comment">/** @jsx h */</span>
+<span class="token keyword">let</span> foo <span class="token operator">=</span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>foo<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token plain-text">Hello!</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+</code></pre>
+
+
+<p>transpiles into:</p>
+<pre><code class="language-js"><span class="token keyword">var</span> foo <span class="token operator">=</span> <span class="token function">h</span><span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>id<span class="token punctuation">:</span><span class="token string">"foo"</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token string">'Hello!'</span><span class="token punctuation">)</span>
+</code></pre>
+
+
+<p>Creating a JSX transpiler is a matter of defining <code>h</code>.</p>
+<p><code>/** @jsx h */</code>, the &quot;pragma&quot;, tells the compiler which <code>h</code> function to use.</p>
+<h2 id="setup">Setup</h2>
+<p>Creating a <code>test.tsx</code> file:</p>
+<pre><code class="language-tsx"><span class="token keyword">const</span> jsx <span class="token operator">=</span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span> <span class="token attr-name">attribute</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>foo<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token plain-text">bar</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span>
+</code></pre>
+
+
+<p>Typescript complains: <code>Cannot use JSX unless the &#39;--jsx&#39; flag is provided</code>. We can set <code>&quot;jsx&quot;: &quot;preserve&quot;</code> in <code>tsconfig.json</code>, to make the error disappear. But if we run the compiler, <code>npx tsc</code>, the resulting <code>test.jsx</code> looks the same. That is what <code>&quot;preserve&quot;</code> does, typescript just creates a <code>.jsx</code> file.</p>
+<p>According to the <a href="https://www.typescriptlang.org/docs/handbook/jsx.html#basic-usage">docs</a>, other possible values for <code>&quot;jsx&quot;</code> are <code>&quot;react&quot;</code> and <code>&quot;react-native&quot;</code>. Using the first, typescript has a new complaint: <code>Cannot find name &#39;React&#39;</code>. With the pragma, typescript says: <code>Cannot find name &#39;h&#39;</code> but it does create <code>test.js</code>:</p>
+<pre><code class="language-js"><span class="token string">"use strict"</span><span class="token punctuation">;</span>
+<span class="token comment">/** @jsx h */</span>
+<span class="token keyword">var</span> jsx <span class="token operator">=</span> <span class="token function">h</span><span class="token punctuation">(</span><span class="token string">"text"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> attribute<span class="token punctuation">:</span> <span class="token string">"foo"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token string">"bar"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+
+
+<p>Looks good. Time to create <code>h.ts</code>:</p>
+<pre><code class="language-ts"><span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token operator">...</span>args</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token builtin">console</span><span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span>
+</code></pre>
+
+
+<p>Importing it into <code>test.tsx</code> under the pragma, the compiler is happy. If we run <code>npx ts-node test.tsx</code>, it logs:</p>
+<pre><code class="language-json"><span class="token punctuation">[</span> <span class="token string">"text"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token property">"attribute"</span><span class="token operator">:</span> <span class="token string">"foo"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token string">"bar"</span> <span class="token punctuation">]</span>
+</code></pre>
+
+
+<p>Now all you have to do is make <code>h</code> do something more useful than logging.</p>
+<h2 id="jsx-types">JSX types</h2>
+<p>When I said that typescript is not complaining, that was because I had <code>&quot;noImplicitAny&quot;: false</code> in <code>tsconfig.json</code>. We need to set that to <code>true</code>.</p>
+<p>Now we get a <code>JSX element implicitly has type &#39;any&#39; because no interface &#39;JSX.IntrinsicElements&#39; exists</code> error. Let&#39;s create <code>jsx.d.ts</code>:</p>
+<pre><code class="language-ts"><span class="token keyword">declare</span> <span class="token keyword">namespace</span> <span class="token constant">JSX</span> <span class="token punctuation">{</span>
+  <span class="token keyword">interface</span> <span class="token class-name">IntrinsicElements</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">[</span>key<span class="token punctuation">:</span> <span class="token builtin">string</span><span class="token punctuation">]</span><span class="token punctuation">:</span> <span class="token builtin">any</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+
+<p>The compiler is happy. But this does not give us any type checking because we are saying that any element goes with any property (<code>[key: string]: any</code>).</p>
+<p>If we only allow the element <code>&lt;text&gt;</code> with a required property <code>attribute</code>:</p>
+<pre><code class="language-ts"><span class="token keyword">declare</span> <span class="token keyword">namespace</span> <span class="token constant">JSX</span> <span class="token punctuation">{</span>
+  <span class="token keyword">interface</span> <span class="token class-name">IntrinsicElements</span> <span class="token punctuation">{</span>
+    text<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      attribute<span class="token punctuation">:</span> <span class="token builtin">string</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+
+
+<pre><code class="language-jsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span> <span class="token attr-name">attribute</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>foo<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token plain-text">bar</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span>
+</code></pre>
+
+
+<p>is valid. But:</p>
+<pre><code class="language-jsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span> <span class="token attr-name">attribute</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">}</span></span><span class="token punctuation">></span></span><span class="token plain-text">bar</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span>
+</code></pre>
+
+
+<p>gets a <code>Type &#39;number&#39; is not assignable to type &#39;string&#39;</code> error.</p>
+<pre><code class="language-jsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">></span></span><span class="token plain-text">bar</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span>
+</code></pre>
+
+
+<p><code>Property &#39;attribute&#39; is missing in type &#39;{}&#39; but required in type &#39;{ attribute: string; }&#39;</code></p>
+<pre><code class="language-jsx"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>hello</span><span class="token punctuation">></span></span><span class="token plain-text">World</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>hello</span><span class="token punctuation">></span></span>
+</code></pre>
+
+
+<p><code>Property &#39;hello&#39; does not exist on type &#39;JSX.IntrinsicElements&#39;</code></p>
+<p>...and so on. We have proper type checking for our JSX.</p>
+<h2 id="publishing-with-types">Publishing with types</h2>
+<p>You have created a useful <code>h</code> function and the types for all possible base elements that it understands. Time to publish. I am not going to lie, this is the part that took me the most time. And gave me the biggest headache. The purpose of this post is to avoid going through this next time. And maybe save you a couple of hours.</p>
+<p>I will not go through all my different failed attempts. I ended up having a look at the <a href="https://github.com/preactjs/preact/blob/master/src/index.d.ts">preact types</a> for inspiration.</p>
+<p>The solution was to not let typescript create the types automatically by setting <code>&quot;declaration&quot;</code> to <code>false</code> in <code>tsconfig</code> and write the types by hand.</p>
+<p>First export the JSX namespace in <code>jsx.d.ts</code> as JSXInternal, like this:</p>
+<pre><code class="language-ts"><span class="token keyword">export</span> <span class="token keyword">namespace</span> JSXInternal <span class="token punctuation">{</span>
+  <span class="token keyword">interface</span> <span class="token class-name">IntrinsicElements</span> <span class="token punctuation">{</span>
+    text<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      attribute<span class="token punctuation">:</span> <span class="token builtin">string</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+
+<p>And create <code>types.d.ts</code> in the <code>dist</code> folder with:</p>
+<pre><code class="language-tsx"><span class="token keyword">export</span> <span class="token operator">=</span> myLibrary
+<span class="token keyword">export</span> <span class="token keyword">as</span> <span class="token keyword">namespace</span> myLibrary
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> JSXInternal <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'./jsx'</span>
+
+<span class="token keyword">declare</span> <span class="token keyword">namespace</span> myLibrary <span class="token punctuation">{</span>
+  <span class="token keyword">export</span> <span class="token keyword">import</span> <span class="token constant">JSX</span> <span class="token operator">=</span> JSXInternal
+  <span class="token keyword">interface</span> <span class="token class-name">Whatever</span> <span class="token punctuation">{</span> <span class="token comment">/* whatever your h returns */</span> <span class="token punctuation">}</span>
+  <span class="token keyword">function</span> <span class="token function">h</span><span class="token punctuation">(</span><span class="token parameter">data<span class="token punctuation">:</span> <span class="token builtin">any</span></span><span class="token punctuation">)</span><span class="token punctuation">:</span> Whatever
+  <span class="token keyword">namespace</span> h <span class="token punctuation">{</span>
+    <span class="token keyword">export</span> <span class="token keyword">import</span> <span class="token constant">JSX</span> <span class="token operator">=</span> JSXInternal
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+
+<p>Don&#39;t forget to copy <code>jsx.d.ts</code> to the <code>dist</code> folder. And add <code>&quot;types&quot;: &quot;dist/types.d.ts&quot;</code> to <code>package.json</code>.</p>
+<p>You are ready to publish your JSX transpiler with type checking. I made <a href="https://www.npmjs.com/package/pdfmakejsx">pdfmakejsx</a>.</p>
+<p>Have fun.</p>
+
+  </div>
+
+        <footer>
+    <p>info<span class="lighter">at</span>idris-maps<span class="lighter">dot</span>com</p>
+  </footer>
+      </body>
+    </html>

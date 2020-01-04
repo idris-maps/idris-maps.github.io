@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+  
+    <html lang="en">
+      <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Idris maps">
+    <meta name="description" content="Get SRTM elevation data and convert to geoJSON with gdal.">
+    <meta name="keywords" content="elevation data, SRTM, geoJSON, gdal">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta property="og:image" content="undefined">
+    <meta property="og:description" content="Get SRTM elevation data and convert to geoJSON with gdal.">
+    <meta property="og:title" content="Get elevation data">
+    <meta name="twitter:title" content="Get elevation data">
+    <link rel="shortcut icon" href="favicon.ico">
+    <title>Get elevation data</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../prism.css">
+    <script type="application/ld+json">{"@type":"BlogPosting","alternativeHeadline":"Get SRTM elevation data and convert to geoJSON with gdal.","articleBody":"# Get elevation data\n\nYou can get most geodata on OpenStreetMap. But there is one type of data you do not get there: elevation data.\n\n**SRTM**\n\nFrom the [wikipedia article](https://en.wikipedia.org/wiki/Shuttle_Radar_Topography_Mission)\n\n> *The Shuttle Radar Topography Mission (SRTM) is an international research effort that obtained digital elevation models on a near-global scale from 56° S to 60° N.*\n> (...)\n> *The elevation models are arranged into tiles, each covering one degree of latitude and one degree of longitude, named according to their south western corners.*\n> (...)\n> *They can be downloaded freely over the Internet, and their file format (.hgt) is widely supported.*\n\n## Where can I get some?\n\nAfter a quick internet search I found somewhere to get said `.hgt` files: [viewfinderpanorama.org](http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm). I am sure there are other sources but this is what we are looking for.\n\nAs an example I will get the rock of Gibraltar with the following bounding box:\n\n```js\n{\n\tminLongitude: -5.376434,\n\tminLatitude: 36.10626,\n\tmaxLongitude: -5.324249,\n\tmaxLatitude: 36.160885\n}\n```\n\nThe tile we are looking for is N36W006.hgt.\n\n## Extract the data\n\nI tried opening the file in a text editor. Turns out it is not in a human readable format. But there is a package that reads most geodata, [GDAL](http://www.gdal.org/). If you do GIS on your computer, chances are you already have it installed as it comes as a dependency to a lot of mapping software.\n\n### GDAL\n\nCheck if you have it by opening a terminal window:\n\n```bash\n$ ogrinfo\n```\n\nIf you get something like below, you have it.\n\n```bash\nUsage: ogrinfo [--help-general] [-ro] [-q] [-where restricted_where]\n               [-spat xmin ymin xmax ymax] [-geomfield field] [-fid fid]\n               [-sql statement] [-dialect sql_dialect] [-al] [-so] [-fields={YES/NO}]\n               [-geom={YES/NO/SUMMARY}][--formats]\n               datasource_name [layer [layer ...]]\n\nFAILURE: No datasource specified.\n```\n\nOtherwise, see install instructions [here](http://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries). \n\n### Crop the area we want\n\nThe first step is to crop the `.hgt` file to the area we need with [gdalwarp](http://www.gdal.org/gdalwarp.html).\n\nThe pattern looks like this:\n\n```bash\ngdalwarp -te <x_min> <y_min> <x_max> <y_max> source.file destination.file\n```\n\nSo for gibraltar we do:\n\n```bash\ngdalwarp -te -5.376434 36.10626 -5.324249 36.160885 N36W006.hgt gibraltar.hgt\n```\n\nOur bounding box fits into a single `.hgt` file. If it had been on several files, we would have added all source files, like this:\n\n```bash\ngdalwarp -te <x_min> <y_min> <x_max> <y_max> source1.file source2.file source3.file destination.file\n```\n\n### Convert to GeoTIFF\n\nNow that we have `gibraltar.hgt`, let's convert it to a [GeoTIFF](https://en.wikipedia.org/wiki/GeoTIFF), a georeferenced image file.\n\nFirst we need to specify the color scale we want by creating a file called `relief.clr`:\n\n```bash\n100% 255:255:255\n0%   0:0:0\nnv   0:0:0\n```\n\nThis is a black and white color scale.\n\nThen we convert it using [gdaldem](http://www.gdal.org/gdaldem.html):\n\n```bash\ngdaldem color-relief -of GTiff gibraltar.hgt relief.clr gibraltar.tiff\n```\n\nWe get a picture that looks like this:\n\n![Gibraltar geoJSON](https://raw.githubusercontent.com/idris-maps/get-elevation-data/master/img/gibraltar-geotiff.png)\n\n### Convert to vector data\n\nWe have a raster file but want to convert it to a vector format. We will use [gdal_contour](http://www.gdal.org/gdal_contour.html) specifing the following options:\n\n* ```-i``` the height interval in meters.\n* ```-snodata``` what to do with void pixels (see the explanation [here](http://wiki.openstreetmap.org/wiki/Contours#The_shapefiles_approach))\n* ```-f``` the output format (defaults to shapefile)\n* ```-a``` the name of the elevation property\n\nThe command looks like this:\n\n```bash\ngdal_contour -i 10 -snodata 32767 -f \"GeoJSON\" -a height gibraltar.tiff gibraltar.json\n```\n\nWe have a GeoJSON file (a human readable vector data format) called `gibraltar.json`.\n\n![Gibraltar geoJSON](https://raw.githubusercontent.com/idris-maps/get-elevation-data/master/img/gibraltar-geojson.png)\n\n\n","author":{"@type":"Person","name":"Idris maps","url":"http://idris-maps.com/","sameAs":["https://github.com/idris-maps","https://medium.com/@idris.maps","https://observablehq.com/@idris-maps","https://twitter.com/idrismaps","https://www.npmjs.com/~idris-maps"]},"dateCreated":"2016-02-08","dateModified":"2016-02-08","datePublished":"2016-02-08","headline":"Get elevation data","inLanguage":"en","keywords":["elevation data","SRTM","geoJSON","gdal"],"mainEntityOfPage":"True","url":"http://www.idris-maps.com/Get-elevation-data"}</script>
+  </head>
+      <body>
+        <header>
+    <a href="http://www.idris-maps.com">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+        <g transform="matrix(.84138 0 0 .86313 49.9 51)" fill="none">
+          <ellipse ry="55.6" rx="57" cy="-1.1" cx=".2" fill="gray"/>
+          <path d="M-47.7-15.6c3.9-11.6 22.6-45.2 64.2-32.9A54.1 54.1 0 0 1 50.8 1.7l-2.3.5c-.4 4-.4 8.3-1.9 11.5.3 2-.8 3.1-1.7 4.4l-2 6.2c-1.5 2.2-3 3.7-4.4 4.6-2-2-2.4-4.4-2.7-6.8.4-1.3-6.6-2.8-6.2-5.8-1.6-.8-2.3.5-3.7.2.3-1-.6-1.8-2.6-2.4-2 .4.3-3-6.3-2.3-.9 0-2.2-6.5-7.5-2.4-11.4-7.8-4.6 8.2-2.4 14.9.4.8-2.1 2-.8 3.4.4.7-5 1.7-5.8 1-1.1-1.1-1.4-4-3-3.5-2.2-1.3-3-.2-3.3 1.8 0 1.7-1 2.8-1.6 4 1.3.7 3.9-.3 5.5.8.6-.7 2.1-1.4 6-1.8 3.8.1 3.2-2 4-3.6.2-2.4 3.8-3.2 4.8-6.3.3.4.5-1.2 1 3 1.3-.2.5-2.9 2-2 1.5 1.7-3.9-3.6 4.3 13.7.8 1 1 0 1.3-.2-3.6-6.3-1.9-6-2.7-8.8-1.4-1.6-.5-1.9.1-2.4 1.9.3 1.6 1.4 2 2.3.2-1.8 1.4-1 2.3-1-1 .5-1.8 1.1-1.2 2.4 1.7.1 2 1 2.8 1.6l.1 1.6c1.2.2.8-.7 1-1.1.7 1.3 2.1 0 3.4-.2 1.6.4 3 1 5.7.3 4.6.3 1.2 2.2 1.4 3.3-1.5 1.3-3 2.8-4.6 2.8-1.2-.1-3.2.8-3.5-1-.3-2.7-1.2-2.2-2.3.3-1 1.6-.8 3-1 4.4-2 2-3.4 3.2-2.8.6 0-1 1.7-2.7-1.8-2-2.2 1.1-4.4 1.6-6.5 2.2-1.2-.3-3-1.6-3.1-.3-2-1.4-3.8 1.3-5.7 2.3-4.2 1.3-9-2.9-9.5.5 0 1.2-.4 2.3 3.3 2.8 2 1.2 3 2.6 3.5 4.2-8.5.3-16.3-2.2-17.7-3.8-7.5-5.2-2.3-5.7-6.7-6.6-2.9-.8 1.7-1-4.4-2.7-2.7-.7-3.5-3.6-4.5-5.5-3.4-.2-2.3-1.8-7.1-2.3-.8-.3-3.8-3-3.5-5-.3-1.6 0-3.4-2.2-4-1.6-1 1.3-4-.5-4.4-.2 1-.3 2.5-2 1-.4-2.5.8-1.5 1.7-1.2.6-.5 0-1.1-.3-1.8-1.2-1-2.3-2-2.3-2.7A47 47 0 0 1-44-3.2c1.3-.3 1.9-.2 3.7-1.3 1.2 0 1.3.5 3.3-.9 2.5.8 5.1 1.6 8.4.4 2-1.6 2.8-5.3 6.7-3 3 1.6 3.3-1 5.2.6 1.6.4 5.3-2.9 5 1.4 1 1.3 2 1.9 2.4 4 1.7.2.3 2.4 4 6a4 4 0 0 0 2 2C-2.2.8-6.8-3.7-8.6-8.5c-2-4.5 1.8-2 3.3-2.1a7 7 0 0 1 5.8.1c1.8.2 3.9 0 3.3 3C3.4-4.7 4-2 2.4.3c-.8 1 0 1.8 1.2 2.5 1.9-.4 3.3 1.2 4.8 3 .6-.2 1-1 1.4-1.8-.3-2-1.4-2.1-2.3-2.8C6.3.5 6.4-.1 6.8-1.3 7.8-5 5-9.3 6-13c0-.7-4.4-7.6-5.6-7.6-4.9-2.6-7-2-9-1-2 .4-4.2 1.2-6-.1-3.6-.3-7-.4-10.5.7-3.9 1-8.3.6-11.5 3.4l-5.5 2c-2 .6-3.9.8-5.6.1z" fill="#e6e6e6" stroke="none"/>
+          <path d="M-43-37.4A54.6 54.6 0 0 0-57-1.1 56.3 56.3 0 0 0 0 54.5c20.3 0 38-10.3 48.1-25.8C-5.4 42.8-41 19.7-43-37.4z" opacity=".2" fill="#000" stroke="none"/>
+        </g>
+      </svg>
+    </a>
+  </header>
+        
+  <div class="blog-content">
+  <p class="blog-date">2016-02-08</p>
+  <h1 id="get-elevation-data">Get elevation data</h1>
+<p>You can get most geodata on OpenStreetMap. But there is one type of data you do not get there: elevation data.</p>
+<p><strong>SRTM</strong></p>
+<p>From the <a href="https://en.wikipedia.org/wiki/Shuttle_Radar_Topography_Mission">wikipedia article</a></p>
+<blockquote>
+<p><em>The Shuttle Radar Topography Mission (SRTM) is an international research effort that obtained digital elevation models on a near-global scale from 56° S to 60° N.</em>
+(...)
+<em>The elevation models are arranged into tiles, each covering one degree of latitude and one degree of longitude, named according to their south western corners.</em>
+(...)
+<em>They can be downloaded freely over the Internet, and their file format (.hgt) is widely supported.</em></p>
+</blockquote>
+<h2 id="where-can-i-get-some">Where can I get some?</h2>
+<p>After a quick internet search I found somewhere to get said <code>.hgt</code> files: <a href="http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm">viewfinderpanorama.org</a>. I am sure there are other sources but this is what we are looking for.</p>
+<p>As an example I will get the rock of Gibraltar with the following bounding box:</p>
+<pre><code class="language-js"><span class="token punctuation">{</span>
+    minLongitude<span class="token punctuation">:</span> <span class="token operator">-</span><span class="token number">5.376434</span><span class="token punctuation">,</span>
+    minLatitude<span class="token punctuation">:</span> <span class="token number">36.10626</span><span class="token punctuation">,</span>
+    maxLongitude<span class="token punctuation">:</span> <span class="token operator">-</span><span class="token number">5.324249</span><span class="token punctuation">,</span>
+    maxLatitude<span class="token punctuation">:</span> <span class="token number">36.160885</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+
+<p>The tile we are looking for is N36W006.hgt.</p>
+<h2 id="extract-the-data">Extract the data</h2>
+<p>I tried opening the file in a text editor. Turns out it is not in a human readable format. But there is a package that reads most geodata, <a href="http://www.gdal.org/">GDAL</a>. If you do GIS on your computer, chances are you already have it installed as it comes as a dependency to a lot of mapping software.</p>
+<h3 id="gdal">GDAL</h3>
+<p>Check if you have it by opening a terminal window:</p>
+<pre><code class="language-bash">$ ogrinfo
+</code></pre>
+
+
+<p>If you get something like below, you have it.</p>
+<pre><code class="language-bash">Usage: ogrinfo <span class="token punctuation">[</span>--help-general<span class="token punctuation">]</span> <span class="token punctuation">[</span>-ro<span class="token punctuation">]</span> <span class="token punctuation">[</span>-q<span class="token punctuation">]</span> <span class="token punctuation">[</span>-where restricted_where<span class="token punctuation">]</span>
+               <span class="token punctuation">[</span>-spat xmin ymin xmax ymax<span class="token punctuation">]</span> <span class="token punctuation">[</span>-geomfield field<span class="token punctuation">]</span> <span class="token punctuation">[</span>-fid fid<span class="token punctuation">]</span>
+               <span class="token punctuation">[</span>-sql statement<span class="token punctuation">]</span> <span class="token punctuation">[</span>-dialect sql_dialect<span class="token punctuation">]</span> <span class="token punctuation">[</span>-al<span class="token punctuation">]</span> <span class="token punctuation">[</span>-so<span class="token punctuation">]</span> <span class="token punctuation">[</span>-fields<span class="token operator">=</span><span class="token punctuation">{</span>YES/NO<span class="token punctuation">}</span><span class="token punctuation">]</span>
+               <span class="token punctuation">[</span>-geom<span class="token operator">=</span><span class="token punctuation">{</span>YES/NO/SUMMARY<span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">[</span>--formats<span class="token punctuation">]</span>
+               datasource_name <span class="token punctuation">[</span>layer <span class="token punctuation">[</span>layer <span class="token punctuation">..</span>.<span class="token punctuation">]</span><span class="token punctuation">]</span>
+
+FAILURE: No datasource specified.
+</code></pre>
+
+
+<p>Otherwise, see install instructions <a href="http://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries">here</a>. </p>
+<h3 id="crop-the-area-we-want">Crop the area we want</h3>
+<p>The first step is to crop the <code>.hgt</code> file to the area we need with <a href="http://www.gdal.org/gdalwarp.html">gdalwarp</a>.</p>
+<p>The pattern looks like this:</p>
+<pre><code class="language-bash">gdalwarp -te <span class="token operator">&lt;</span>x_min<span class="token operator">></span> <span class="token operator">&lt;</span>y_min<span class="token operator">></span> <span class="token operator">&lt;</span>x_max<span class="token operator">></span> <span class="token operator">&lt;</span>y_max<span class="token operator">></span> source.file destination.file
+</code></pre>
+
+
+<p>So for gibraltar we do:</p>
+<pre><code class="language-bash">gdalwarp -te -5.376434 <span class="token number">36.10626</span> -5.324249 <span class="token number">36.160885</span> N36W006.hgt gibraltar.hgt
+</code></pre>
+
+
+<p>Our bounding box fits into a single <code>.hgt</code> file. If it had been on several files, we would have added all source files, like this:</p>
+<pre><code class="language-bash">gdalwarp -te <span class="token operator">&lt;</span>x_min<span class="token operator">></span> <span class="token operator">&lt;</span>y_min<span class="token operator">></span> <span class="token operator">&lt;</span>x_max<span class="token operator">></span> <span class="token operator">&lt;</span>y_max<span class="token operator">></span> source1.file source2.file source3.file destination.file
+</code></pre>
+
+
+<h3 id="convert-to-geotiff">Convert to GeoTIFF</h3>
+<p>Now that we have <code>gibraltar.hgt</code>, let&#39;s convert it to a <a href="https://en.wikipedia.org/wiki/GeoTIFF">GeoTIFF</a>, a georeferenced image file.</p>
+<p>First we need to specify the color scale we want by creating a file called <code>relief.clr</code>:</p>
+<pre><code class="language-bash"><span class="token number">100</span>% <span class="token number">255</span>:255:255
+<span class="token number">0</span>%   <span class="token number">0</span>:0:0
+nv   <span class="token number">0</span>:0:0
+</code></pre>
+
+
+<p>This is a black and white color scale.</p>
+<p>Then we convert it using <a href="http://www.gdal.org/gdaldem.html">gdaldem</a>:</p>
+<pre><code class="language-bash">gdaldem color-relief -of GTiff gibraltar.hgt relief.clr gibraltar.tiff
+</code></pre>
+
+
+<p>We get a picture that looks like this:</p>
+<p><img src="https://raw.githubusercontent.com/idris-maps/get-elevation-data/master/img/gibraltar-geotiff.png" alt="Gibraltar geoJSON"></p>
+<h3 id="convert-to-vector-data">Convert to vector data</h3>
+<p>We have a raster file but want to convert it to a vector format. We will use <a href="http://www.gdal.org/gdal_contour.html">gdal_contour</a> specifing the following options:</p>
+<ul>
+<li><p>the height interval in meters.</p>
+</li>
+<li><p>what to do with void pixels (see the explanation <a href="http://wiki.openstreetmap.org/wiki/Contours#The_shapefiles_approach">here</a>)</p>
+</li>
+<li><p>the output format (defaults to shapefile)</p>
+</li>
+<li><p>the name of the elevation property</p>
+</li>
+</ul>
+<p>The command looks like this:</p>
+<pre><code class="language-bash">gdal_contour -i <span class="token number">10</span> -snodata <span class="token number">32767</span> -f <span class="token string">"GeoJSON"</span> -a height gibraltar.tiff gibraltar.json
+</code></pre>
+
+
+<p>We have a GeoJSON file (a human readable vector data format) called <code>gibraltar.json</code>.</p>
+<p><img src="https://raw.githubusercontent.com/idris-maps/get-elevation-data/master/img/gibraltar-geojson.png" alt="Gibraltar geoJSON"></p>
+
+  </div>
+
+        <footer>
+    <p>info<span class="lighter">at</span>idris-maps<span class="lighter">dot</span>com</p>
+  </footer>
+      </body>
+    </html>
