@@ -1,0 +1,53 @@
+* { box-sizing: border-box; }
+@font-face {
+    font-family: 'alegreyaregular';
+    src: url('alegreya-regular-webfont.woff2') format('woff2'),
+         url('alegreya-regular-webfont.woff') format('woff'),
+         url('alegreya-regular-webfont.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html, body { width: 100%; padding: 0; margin: 0; font-family: 'alegreyaregular'; color: #292929; }
+.blog-content > .blog-date { font-size: 0.8em; color: #6f6969; }
+.blog-content { width: 90%; margin: auto; font-size: 35px; color: #292929 }
+.blog-content > p { text-align: justify; width: 100%; }
+/*.blog-content code { font-size: 20px; padding-left: 10px; padding-right: 10px; overflow-x: auto; }*/
+.blog-content > p > img { max-width: 100%; display: block; margin-left: auto; margin-right: auto;}
+.blog-content a { color: black; }
+
+
+header { height: 100px; margin-left: 5%; margin-top: 2%; }
+header > a > svg { height: 100%; }
+
+footer { margin-top: 100px; margin-bottom: 100px; }
+footer p { margin: auto; text-align: center; }
+footer .lighter { font-size: 0.7em; color: #6f6969; margin-left: 0.3em; margin-right: 0.3em }
+
+.splash { display: flex; flex-flow: row wrap; width: 90%; margin: auto; margin-top: 100px; margin-bottom: 100px; }
+.splash-text, .splash-globe { width: 50%; display: flex; align-items: center; padding: 3%; }
+.splash-text > h1 { width: 100%; text-align: center; font-size: 9em; }
+.splash-globe > img { width: 100%; }
+
+.post-list { font-size: 35px; width: 90%; margin: auto; max-width: 1000px; }
+.post-list a { text-decoration: none; color: inherit; }
+.post-list-item-date { width: 100%; text-align: right; font-size: 0.7em; color: #6f6969; }
+.post-list-item { margin-top: 5em; margin-bottom: 5em; width: 100%; }
+
+@media (max-width: 1000px) {
+  .blog-content, .post-list { font-size: 27px;}
+  .blog-content code { font-size: 16px; }
+  .splash-text > h1 { font-size: 5em; }
+} 
+@media (max-width: 600px) {
+  .blog-content, .post-list { font-size: 20px;}
+  header { height: 80px; }
+  .blog-content code { font-size: 14px; }
+  .splash-text > h1 { font-size: 3em; }
+}
+@media (max-width: 300px) {
+  .blog-content, .post-list { font-size: 14px; }
+  header { height: 50px; }
+  .blog-content code { font-size: 12px; }
+  .splash-text > h1 { font-size: 2em; }
+}

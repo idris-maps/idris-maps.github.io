@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+  
+    <html lang="en">
+      <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Idris maps">
+    <meta name="description" content="Use custom projections with leaflet.js">
+    <meta name="keywords" content="projection, leaflet.js, lv95">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta property="og:image" content="undefined">
+    <meta property="og:description" content="Use custom projections with leaflet.js">
+    <meta property="og:title" content="Leafet custom projection">
+    <meta name="twitter:title" content="Leafet custom projection">
+    <link rel="shortcut icon" href="favicon.ico">
+    <title>Leafet custom projection</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../prism.css">
+    <script type="application/ld+json">{"@type":"BlogPosting","alternativeHeadline":"Use custom projections with leaflet.js","articleBody":"# Leafet custom projection\n\nBeing a lightweight library, [LeafletJS](http://leafletjs.com/) does not support many projections out of the box. But thanks to the [proj4leaflet](http://kartena.github.io/Proj4Leaflet/) plugin we can use whatever projection we want. In this short tutorial we will create a map using the swiss projection LV95 (EPSG:2056).\n\n## The dependencies\n\n```js\nconst L = require('leaflet')\nconst proj4 = require('proj4')\nconst proj4L = require('proj4leaflet')\n```\n\n## Define the projection\n\n```js\nconst lv95 = {\n\tepsg: 'EPSG:2056',\n\tdef: '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs',\n\tresolutions: [ 4000, 3750, 3500, 3250, 3000, 2750, 2500, 2250, 2000, 1750, 1500, 1250, 1000, 750, 650, 500, 250, 100, 50, 20, 10, 5, 2.5, 2, 1.5, 1, 0.5],\n\torigin: [2420000, 1350000]\n}\n```\n\n## Define the CRS\n\n```js\nconst crs = new L.Proj.CRS(lv95.epsg, lv95.def, { \n\tresolutions: lv95.resolutions, \n\torigin: lv95.origin\n})\n```\n\n## Initialize the map\n\nusing the CRS and setting max-zoom to the number of available resolutions\n\n```js\nconst map = L.map('map', { \n\tcrs: crs,\n\tmaxZoom: lv95.resolutions.length\n})\n\nmap.setView([47.56,7.59], 22)\n```\n\nWe are ready to add some layers.\n\n## Add a WMS layer\n\nFor this example I used the WMS of [Kanton Basel-Stadt](http://geo.bs.ch/geodaten/geodienste.html).\n\n```js\nconst wms = L.tileLayer.wms('https://wms.geo.bs.ch/wmsBS?', {\n\tlayers: 'BS.HP.Historische_Stadtplaene.Stadtplan_1946',\n\tmaxZoom: lv95.resolutions.length,\n\tattribution: '<a href=\"http://geo.bs.ch\">Kanton Basel-Stadt</a>'\n}).addTo(map)\n```\n\n## Add a GeoJSON layer\n\nFor this layer I extracted the churches from the [POIs of Kanton Basel](http://shop.geo.bs.ch/geoshop_app/geoshop/). \n\n```js\nconst geojson = require('./data/churches.json')\n```\n\nTo make sure that the data is projected correctly, define the CRS for the GeoJSON.\n\n```js\ngeojson.crs = {\n\ttype: 'name',\n\tproperties: { name: 'urn:ogc:def:crs:EPSG::2056' }\n}\n```\n\nAdd the layer.\n\n```js\nL.Proj.geoJson(geojson, {\n\tpointToLayer: function(feature, latlng) {\n\t\tvar popup = `\n      <b>${feature.properties.NAME}</b>\n      <br/>\n\t\t\t<small>${feature.properties.SUBKATEGOR}</small>\n\t\t` // Define popup \n\t\treturn L.marker(latlng).bindPopup(popup) // Represent as marker\n  }\n}).addTo(map)\n```\n\nIf you need to convert between swiss coordinates (LV03 and LV95) ad WGS84, check out [swiss-projection](https://www.npmjs.com/package/swiss-projection).  \n","author":{"@type":"Person","name":"Idris maps","url":"http://idris-maps.com/","sameAs":["https://github.com/idris-maps","https://medium.com/@idris.maps","https://observablehq.com/@idris-maps","https://twitter.com/idrismaps","https://www.npmjs.com/~idris-maps"]},"dateCreated":"2017-04-04","dateModified":"2017-04-04","datePublished":"2017-04-04","headline":"Leafet custom projection","inLanguage":"en","keywords":["projection","leaflet.js","lv95"],"mainEntityOfPage":"True","url":"http://www.idris-maps.com/Leafet-custom-projection"}</script>
+  </head>
+      <body>
+        <header>
+    <a href="http://www.idris-maps.com">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+        <g transform="matrix(.84138 0 0 .86313 49.9 51)" fill="none">
+          <ellipse ry="55.6" rx="57" cy="-1.1" cx=".2" fill="gray"/>
+          <path d="M-47.7-15.6c3.9-11.6 22.6-45.2 64.2-32.9A54.1 54.1 0 0 1 50.8 1.7l-2.3.5c-.4 4-.4 8.3-1.9 11.5.3 2-.8 3.1-1.7 4.4l-2 6.2c-1.5 2.2-3 3.7-4.4 4.6-2-2-2.4-4.4-2.7-6.8.4-1.3-6.6-2.8-6.2-5.8-1.6-.8-2.3.5-3.7.2.3-1-.6-1.8-2.6-2.4-2 .4.3-3-6.3-2.3-.9 0-2.2-6.5-7.5-2.4-11.4-7.8-4.6 8.2-2.4 14.9.4.8-2.1 2-.8 3.4.4.7-5 1.7-5.8 1-1.1-1.1-1.4-4-3-3.5-2.2-1.3-3-.2-3.3 1.8 0 1.7-1 2.8-1.6 4 1.3.7 3.9-.3 5.5.8.6-.7 2.1-1.4 6-1.8 3.8.1 3.2-2 4-3.6.2-2.4 3.8-3.2 4.8-6.3.3.4.5-1.2 1 3 1.3-.2.5-2.9 2-2 1.5 1.7-3.9-3.6 4.3 13.7.8 1 1 0 1.3-.2-3.6-6.3-1.9-6-2.7-8.8-1.4-1.6-.5-1.9.1-2.4 1.9.3 1.6 1.4 2 2.3.2-1.8 1.4-1 2.3-1-1 .5-1.8 1.1-1.2 2.4 1.7.1 2 1 2.8 1.6l.1 1.6c1.2.2.8-.7 1-1.1.7 1.3 2.1 0 3.4-.2 1.6.4 3 1 5.7.3 4.6.3 1.2 2.2 1.4 3.3-1.5 1.3-3 2.8-4.6 2.8-1.2-.1-3.2.8-3.5-1-.3-2.7-1.2-2.2-2.3.3-1 1.6-.8 3-1 4.4-2 2-3.4 3.2-2.8.6 0-1 1.7-2.7-1.8-2-2.2 1.1-4.4 1.6-6.5 2.2-1.2-.3-3-1.6-3.1-.3-2-1.4-3.8 1.3-5.7 2.3-4.2 1.3-9-2.9-9.5.5 0 1.2-.4 2.3 3.3 2.8 2 1.2 3 2.6 3.5 4.2-8.5.3-16.3-2.2-17.7-3.8-7.5-5.2-2.3-5.7-6.7-6.6-2.9-.8 1.7-1-4.4-2.7-2.7-.7-3.5-3.6-4.5-5.5-3.4-.2-2.3-1.8-7.1-2.3-.8-.3-3.8-3-3.5-5-.3-1.6 0-3.4-2.2-4-1.6-1 1.3-4-.5-4.4-.2 1-.3 2.5-2 1-.4-2.5.8-1.5 1.7-1.2.6-.5 0-1.1-.3-1.8-1.2-1-2.3-2-2.3-2.7A47 47 0 0 1-44-3.2c1.3-.3 1.9-.2 3.7-1.3 1.2 0 1.3.5 3.3-.9 2.5.8 5.1 1.6 8.4.4 2-1.6 2.8-5.3 6.7-3 3 1.6 3.3-1 5.2.6 1.6.4 5.3-2.9 5 1.4 1 1.3 2 1.9 2.4 4 1.7.2.3 2.4 4 6a4 4 0 0 0 2 2C-2.2.8-6.8-3.7-8.6-8.5c-2-4.5 1.8-2 3.3-2.1a7 7 0 0 1 5.8.1c1.8.2 3.9 0 3.3 3C3.4-4.7 4-2 2.4.3c-.8 1 0 1.8 1.2 2.5 1.9-.4 3.3 1.2 4.8 3 .6-.2 1-1 1.4-1.8-.3-2-1.4-2.1-2.3-2.8C6.3.5 6.4-.1 6.8-1.3 7.8-5 5-9.3 6-13c0-.7-4.4-7.6-5.6-7.6-4.9-2.6-7-2-9-1-2 .4-4.2 1.2-6-.1-3.6-.3-7-.4-10.5.7-3.9 1-8.3.6-11.5 3.4l-5.5 2c-2 .6-3.9.8-5.6.1z" fill="#e6e6e6" stroke="none"/>
+          <path d="M-43-37.4A54.6 54.6 0 0 0-57-1.1 56.3 56.3 0 0 0 0 54.5c20.3 0 38-10.3 48.1-25.8C-5.4 42.8-41 19.7-43-37.4z" opacity=".2" fill="#000" stroke="none"/>
+        </g>
+      </svg>
+    </a>
+  </header>
+        
+  <div class="blog-content">
+  <p class="blog-date">2017-04-04</p>
+  <h1 id="leafet-custom-projection">Leafet custom projection</h1>
+<p>Being a lightweight library, <a href="http://leafletjs.com/">LeafletJS</a> does not support many projections out of the box. But thanks to the <a href="http://kartena.github.io/Proj4Leaflet/">proj4leaflet</a> plugin we can use whatever projection we want. In this short tutorial we will create a map using the swiss projection LV95 (EPSG:2056).</p>
+<h2 id="the-dependencies">The dependencies</h2>
+<pre><code class="language-js"><span class="token keyword">const</span> <span class="token constant">L</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'leaflet'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> proj4 <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'proj4'</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> proj4L <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'proj4leaflet'</span><span class="token punctuation">)</span>
+</code></pre>
+
+
+<h2 id="define-the-projection">Define the projection</h2>
+<pre><code class="language-js"><span class="token keyword">const</span> lv95 <span class="token operator">=</span> <span class="token punctuation">{</span>
+    epsg<span class="token punctuation">:</span> <span class="token string">'EPSG:2056'</span><span class="token punctuation">,</span>
+    def<span class="token punctuation">:</span> <span class="token string">'+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs'</span><span class="token punctuation">,</span>
+    resolutions<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token number">4000</span><span class="token punctuation">,</span> <span class="token number">3750</span><span class="token punctuation">,</span> <span class="token number">3500</span><span class="token punctuation">,</span> <span class="token number">3250</span><span class="token punctuation">,</span> <span class="token number">3000</span><span class="token punctuation">,</span> <span class="token number">2750</span><span class="token punctuation">,</span> <span class="token number">2500</span><span class="token punctuation">,</span> <span class="token number">2250</span><span class="token punctuation">,</span> <span class="token number">2000</span><span class="token punctuation">,</span> <span class="token number">1750</span><span class="token punctuation">,</span> <span class="token number">1500</span><span class="token punctuation">,</span> <span class="token number">1250</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">,</span> <span class="token number">750</span><span class="token punctuation">,</span> <span class="token number">650</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">,</span> <span class="token number">250</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">2.5</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">1.5</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0.5</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    origin<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token number">2420000</span><span class="token punctuation">,</span> <span class="token number">1350000</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+
+<h2 id="define-the-crs">Define the CRS</h2>
+<pre><code class="language-js"><span class="token keyword">const</span> crs <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">L<span class="token punctuation">.</span>Proj<span class="token punctuation">.</span>CRS</span><span class="token punctuation">(</span>lv95<span class="token punctuation">.</span>epsg<span class="token punctuation">,</span> lv95<span class="token punctuation">.</span>def<span class="token punctuation">,</span> <span class="token punctuation">{</span> 
+    resolutions<span class="token punctuation">:</span> lv95<span class="token punctuation">.</span>resolutions<span class="token punctuation">,</span> 
+    origin<span class="token punctuation">:</span> lv95<span class="token punctuation">.</span>origin
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+
+
+<h2 id="initialize-the-map">Initialize the map</h2>
+<p>using the CRS and setting max-zoom to the number of available resolutions</p>
+<pre><code class="language-js"><span class="token keyword">const</span> map <span class="token operator">=</span> <span class="token constant">L</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token string">'map'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> 
+    crs<span class="token punctuation">:</span> crs<span class="token punctuation">,</span>
+    maxZoom<span class="token punctuation">:</span> lv95<span class="token punctuation">.</span>resolutions<span class="token punctuation">.</span>length
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+map<span class="token punctuation">.</span><span class="token function">setView</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">47.56</span><span class="token punctuation">,</span><span class="token number">7.59</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">22</span><span class="token punctuation">)</span>
+</code></pre>
+
+
+<p>We are ready to add some layers.</p>
+<h2 id="add-a-wms-layer">Add a WMS layer</h2>
+<p>For this example I used the WMS of <a href="http://geo.bs.ch/geodaten/geodienste.html">Kanton Basel-Stadt</a>.</p>
+<pre><code class="language-js"><span class="token keyword">const</span> wms <span class="token operator">=</span> <span class="token constant">L</span><span class="token punctuation">.</span>tileLayer<span class="token punctuation">.</span><span class="token function">wms</span><span class="token punctuation">(</span><span class="token string">'https://wms.geo.bs.ch/wmsBS?'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    layers<span class="token punctuation">:</span> <span class="token string">'BS.HP.Historische_Stadtplaene.Stadtplan_1946'</span><span class="token punctuation">,</span>
+    maxZoom<span class="token punctuation">:</span> lv95<span class="token punctuation">.</span>resolutions<span class="token punctuation">.</span>length<span class="token punctuation">,</span>
+    attribution<span class="token punctuation">:</span> <span class="token string">'&lt;a href="http://geo.bs.ch">Kanton Basel-Stadt&lt;/a>'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">addTo</span><span class="token punctuation">(</span>map<span class="token punctuation">)</span>
+</code></pre>
+
+
+<h2 id="add-a-geojson-layer">Add a GeoJSON layer</h2>
+<p>For this layer I extracted the churches from the <a href="http://shop.geo.bs.ch/geoshop_app/geoshop/">POIs of Kanton Basel</a>. </p>
+<pre><code class="language-js"><span class="token keyword">const</span> geojson <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./data/churches.json'</span><span class="token punctuation">)</span>
+</code></pre>
+
+
+<p>To make sure that the data is projected correctly, define the CRS for the GeoJSON.</p>
+<pre><code class="language-js">geojson<span class="token punctuation">.</span>crs <span class="token operator">=</span> <span class="token punctuation">{</span>
+    type<span class="token punctuation">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
+    properties<span class="token punctuation">:</span> <span class="token punctuation">{</span> name<span class="token punctuation">:</span> <span class="token string">'urn:ogc:def:crs:EPSG::2056'</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+
+<p>Add the layer.</p>
+<pre><code class="language-js"><span class="token constant">L</span><span class="token punctuation">.</span>Proj<span class="token punctuation">.</span><span class="token function">geoJson</span><span class="token punctuation">(</span>geojson<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+    <span class="token function-variable function">pointToLayer</span><span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token parameter">feature<span class="token punctuation">,</span> latlng</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">var</span> popup <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">
+      &lt;b></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>feature<span class="token punctuation">.</span>properties<span class="token punctuation">.</span><span class="token constant">NAME</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/b>
+      &lt;br/>
+            &lt;small></span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>feature<span class="token punctuation">.</span>properties<span class="token punctuation">.</span><span class="token constant">SUBKATEGOR</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&lt;/small>
+        </span><span class="token template-punctuation string">`</span></span> <span class="token comment">// Define popup </span>
+        <span class="token keyword">return</span> <span class="token constant">L</span><span class="token punctuation">.</span><span class="token function">marker</span><span class="token punctuation">(</span>latlng<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">bindPopup</span><span class="token punctuation">(</span>popup<span class="token punctuation">)</span> <span class="token comment">// Represent as marker</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">addTo</span><span class="token punctuation">(</span>map<span class="token punctuation">)</span>
+</code></pre>
+
+
+<p>If you need to convert between swiss coordinates (LV03 and LV95) ad WGS84, check out <a href="https://www.npmjs.com/package/swiss-projection">swiss-projection</a>.  </p>
+
+  </div>
+
+        <footer>
+    <p>info<span class="lighter">at</span>idris-maps<span class="lighter">dot</span>com</p>
+  </footer>
+      </body>
+    </html>
