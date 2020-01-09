@@ -12,13 +12,37 @@ html, body { width: 100%; padding: 0; margin: 0; font-family: 'alegreyaregular';
 .blog-content > .blog-date { font-size: 0.8em; color: #6f6969; }
 .blog-content { width: 90%; margin: auto; font-size: 35px; color: #292929 }
 .blog-content > p { text-align: justify; width: 100%; }
-/*.blog-content code { font-size: 20px; padding-left: 10px; padding-right: 10px; overflow-x: auto; }*/
 .blog-content > p > img { max-width: 100%; display: block; margin-left: auto; margin-right: auto;}
 .blog-content a { color: black; }
 
 
-header { height: 100px; margin-left: 5%; margin-top: 2%; }
-header > a > svg { height: 100%; }
+header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 90%;
+  margin: auto;
+  margin-top: 1em;
+}
+.cta-container { flex: auto; text-align: right; }
+.logo { height: 100px; }
+.gis-cta-long, .gis-cta-short {
+  cursor: pointer;
+  background: white;
+  color: #292929;
+  border: 2px solid #292929;
+  font-size: 1.2em;
+  font-family: 'alegreyaregular';
+}
+.gis-cta-long:hover, .gis-cta-short:hover {
+  background: #292929;
+  color:white;
+  border: none;
+}
+.gis-cta-long { display: inline-block; padding: 0.6em 1.5em 0.8em 1.2em; }
+.gis-cta-short { display: none; padding: 0.3em 0.8em 0.4em 0.5em; }
+.gis-cta-long svg { width: 1.2em; position: relative; top: 0.2em; left: 0.2em; }
+.gis-cta-short svg { width: 1em; position: relative; top: 0.2em; left: 0.1em; }
 
 footer { margin-top: 100px; margin-bottom: 100px; }
 footer p { margin: auto; text-align: center; }
@@ -41,13 +65,15 @@ footer .lighter { font-size: 0.7em; color: #6f6969; margin-left: 0.3em; margin-r
 } 
 @media (max-width: 600px) {
   .blog-content, .post-list { font-size: 20px;}
-  header { height: 80px; }
+  .logo { height: 80px; }
   .blog-content code { font-size: 14px; }
   .splash-text > h1 { font-size: 3em; }
+  .gis-cta-long { display: none; }
+  .gis-cta-short { display: inline-block; }
 }
 @media (max-width: 300px) {
   .blog-content, .post-list { font-size: 14px; }
-  header { height: 50px; }
+  .logo { height: 50px; }
   .blog-content code { font-size: 12px; }
   .splash-text > h1 { font-size: 2em; }
 }
