@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>idris-maps</title>
+  <link href="https://idris-maps.com/feed.xml" rel="self"/>
+  <link href="https://idris-maps.com/"/>
+  <updated>2020-05-22T14:44:20Z</updated>
+  <id>https://idris-maps.com/</id>
+  <author>
+    <name>Anders</name>
+  </author>
+    <entry>
+      <title>World countries 1946-2016</title>
+      <link href="https://observablehq.com/@idris-maps/world-countries-1946-2016/"/>
+      <updated>2020-05-21T00:00:00Z</updated>
+      <id>https://observablehq.com/@idris-maps/world-countries-1946-2016/</id>
+      <content type="html">A map of all world countries on any day between 1946 and 2016.</content>
+    </entry>
+    <entry>
+      <title>middle-manager</title>
+      <link href="https://github.com/idris-maps/middle-manager/"/>
+      <updated>2020-04-12T00:00:00Z</updated>
+      <id>https://github.com/idris-maps/middle-manager/</id>
+      <content type="html">&quot;The no bullshit presentation tool&quot;. A CLI tool to create presentations with markdown.</content>
+    </entry>
+    <entry>
+      <title>Svea rikes gränser</title>
+      <link href="https://svearikes-graenser.surge.sh/"/>
+      <updated>2019-12-18T00:00:00Z</updated>
+      <id>https://svearikes-graenser.surge.sh/</id>
+      <content type="html">En interaktiv karta över hur Sveriges gränser förändras mellan 1560 och 1815.</content>
+    </entry>
+    <entry>
+      <title>Create a JSX transpiler</title>
+      <link href="https://idris-maps.com/blog/create-a-jsx-transpiler/"/>
+      <updated>2019-08-23T00:00:00Z</updated>
+      <id>https://idris-maps.com/blog/create-a-jsx-transpiler/</id>
+      <content type="html">Create a JSX transpiler with Typescript in order to have the IDE and compiler tell you which elements and properties are allowed.</content>
+    </entry>
+    <entry>
+      <title>Tagged templates</title>
+      <link href="https://idris-maps.com/blog/tagged-templates/"/>
+      <updated>2019-06-07T00:00:00Z</updated>
+      <id>https://idris-maps.com/blog/tagged-templates/</id>
+      <content type="html">How ES6 tagged templates are used in frontend javascript librairies such as htm, hyperHTML and lit-html.</content>
+    </entry>
+    <entry>
+      <title>My new phone is a banana</title>
+      <link href="https://idris-maps.com/blog/my-new-phone-is-a-banana/"/>
+      <updated>2019-06-03T00:00:00Z</updated>
+      <id>https://idris-maps.com/blog/my-new-phone-is-a-banana/</id>
+      <content type="html">Creating the missing apps for Nokia 8110 with Gerda OS.</content>
+    </entry>
+    <entry>
+      <title>Baltic cities</title>
+      <link href="https://baltic-cities.surge.sh/"/>
+      <updated>2019-05-01T00:00:00Z</updated>
+      <id>https://baltic-cities.surge.sh/</id>
+      <content type="html">A historical map of the cities around the Baltic sea since 1200.</content>
+    </entry>
+    <entry>
+      <title>Leafet custom projection</title>
+      <link href="https://idris-maps.com/blog/leaflet-custom-projection/"/>
+      <updated>2017-04-04T00:00:00Z</updated>
+      <id>https://idris-maps.com/blog/leaflet-custom-projection/</id>
+      <content type="html">Use custom projections with leaflet.js</content>
+    </entry>
+    <entry>
+      <title>Eastward</title>
+      <link href="https://going-east.surge.sh/"/>
+      <updated>2017-03-17T00:00:00Z</updated>
+      <id>https://going-east.surge.sh/</id>
+      <content type="html">About the Norse expansion to the East and the Rus state.</content>
+    </entry>
+    <entry>
+      <title>Loud animals</title>
+      <link href="https://loud-animals.surge.sh/"/>
+      <updated>2017-03-12T00:00:00Z</updated>
+      <id>https://loud-animals.surge.sh/</id>
+      <content type="html">An interactive kids &#39;book&#39;. Made for my nieces that are not allowed to use computers.</content>
+    </entry>
+    <entry>
+      <title>Votations</title>
+      <link href="http://votations.1866-2016.surge.sh/"/>
+      <updated>2016-03-20T00:00:00Z</updated>
+      <id>http://votations.1866-2016.surge.sh/</id>
+      <content type="html">Cartes des résultats de toutes les votations fédérales depuis 1866 par canton.</content>
+    </entry>
+    <entry>
+      <title>The EU migrant crisis</title>
+      <link href="https://migrant-crisis.surge.sh/"/>
+      <updated>2016-03-18T00:00:00Z</updated>
+      <id>https://migrant-crisis.surge.sh/</id>
+      <content type="html">Data visualisations putting the 2015 crisis in context.</content>
+    </entry>
+    <entry>
+      <title>Get elevation data</title>
+      <link href="https://idris-maps.com/blog/get-elevation-data/"/>
+      <updated>2016-02-08T00:00:00Z</updated>
+      <id>https://idris-maps.com/blog/get-elevation-data/</id>
+      <content type="html">Get SRTM elevation data and convert to geoJSON with gdal.</content>
+    </entry>
+    <entry>
+      <title>Switzerland 3d</title>
+      <link href="https://switzerland-3d.surge.sh/"/>
+      <updated>2016-01-31T00:00:00Z</updated>
+      <id>https://switzerland-3d.surge.sh/</id>
+      <content type="html">Playing around with three.js and elevation data.</content>
+    </entry>
+    <entry>
+      <title>Runestones</title>
+      <link href="https://travel-runestones.surge.sh/"/>
+      <updated>2015-11-12T00:00:00Z</updated>
+      <id>https://travel-runestones.surge.sh/</id>
+      <content type="html">A map of the runestones about travels outside of Scandinavia.</content>
+    </entry>
+    <entry>
+      <title>GIS with javascript</title>
+      <link href="https://github.com/idris-maps/gis-with-javascript-tutorial/"/>
+      <updated>2015-09-14T00:00:00Z</updated>
+      <id>https://github.com/idris-maps/gis-with-javascript-tutorial/</id>
+      <content type="html">A tutorial in 6 chapters about cartography in JS.</content>
+    </entry>
+</feed>

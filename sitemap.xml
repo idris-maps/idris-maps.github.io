@@ -1,63 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://idris-maps.com/index.html</loc>
-    <lastmod>2020-01-09</lastmod>
+    <loc>https://idris-maps.com/</loc>
+    <lastmod>2020-05-22</lastmod>
   </url>
-<url>
-    <loc>https://svearikes-graenser.surge.sh</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
-<url>
-    <loc>https://idris-maps.com/blog/Create-a-JSX-transpiler.html</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
-<url>
-    <loc>https://idris-maps.com/blog/Tagged-templates.html</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
-<url>
-    <loc>https://idris-maps.com/blog/My-new-phone-is-a-banana.html</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
-<url>
-    <loc>https://baltic-cities.surge.sh</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
-<url>
-    <loc>https://idris-maps.com/blog/Leafet-custom-projection.html</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
-<url>
-    <loc>https://going-east.surge.sh/</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
-<url>
-    <loc>https://loud-animals.surge.sh/</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
-<url>
-    <loc>http://votations.1866-2016.surge.sh</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
-<url>
-    <loc>https://migrant-crisis.surge.sh</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
-<url>
-    <loc>https://idris-maps.com/blog/Get-elevation-data.html</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
-<url>
-    <loc>https://switzerland-3d.surge.sh</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
-<url>
-    <loc>https://travel-runestones.surge.sh/</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
-<url>
-    <loc>https://github.com/idris-maps/gis-with-javascript-tutorial</loc>
-    <lastmod>2020-01-09</lastmod>
-  </url>
+    <url>
+      <loc>https://observablehq.com/@idris-maps/world-countries-1946-2016/</loc>
+      <lastmod>2020-05-21</lastmod>
+    </url>
+    <url>
+      <loc>https://github.com/idris-maps/middle-manager/</loc>
+      <lastmod>2020-04-12</lastmod>
+    </url>
+    <url>
+      <loc>https://svearikes-graenser.surge.sh/</loc>
+      <lastmod>2019-12-18</lastmod>
+    </url>
+    <url>
+      <loc>https://idris-maps.com/blog/create-a-jsx-transpiler/</loc>
+      <lastmod>2019-08-23</lastmod>
+    </url>
+    <url>
+      <loc>https://idris-maps.com/blog/tagged-templates/</loc>
+      <lastmod>2019-06-07</lastmod>
+    </url>
+    <url>
+      <loc>https://idris-maps.com/blog/my-new-phone-is-a-banana/</loc>
+      <lastmod>2019-06-03</lastmod>
+    </url>
+    <url>
+      <loc>https://baltic-cities.surge.sh/</loc>
+      <lastmod>2019-05-01</lastmod>
+    </url>
+    <url>
+      <loc>https://idris-maps.com/blog/leaflet-custom-projection/</loc>
+      <lastmod>2017-04-04</lastmod>
+    </url>
+    <url>
+      <loc>https://going-east.surge.sh/</loc>
+      <lastmod>2017-03-17</lastmod>
+    </url>
+    <url>
+      <loc>https://loud-animals.surge.sh/</loc>
+      <lastmod>2017-03-12</lastmod>
+    </url>
+    <url>
+      <loc>http://votations.1866-2016.surge.sh/</loc>
+      <lastmod>2016-03-20</lastmod>
+    </url>
+    <url>
+      <loc>https://migrant-crisis.surge.sh/</loc>
+      <lastmod>2016-03-18</lastmod>
+    </url>
+    <url>
+      <loc>https://idris-maps.com/blog/get-elevation-data/</loc>
+      <lastmod>2016-02-08</lastmod>
+    </url>
+    <url>
+      <loc>https://switzerland-3d.surge.sh/</loc>
+      <lastmod>2016-01-31</lastmod>
+    </url>
+    <url>
+      <loc>https://travel-runestones.surge.sh/</loc>
+      <lastmod>2015-11-12</lastmod>
+    </url>
+    <url>
+      <loc>https://github.com/idris-maps/gis-with-javascript-tutorial/</loc>
+      <lastmod>2015-09-14</lastmod>
+    </url>
 </urlset>
