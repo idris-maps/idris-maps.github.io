@@ -2,8 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://idris-maps.com/</loc>
-    <lastmod>2020-05-22</lastmod>
+    <lastmod>2020-05-23</lastmod>
   </url>
+    <url>
+      <loc>https://idris-maps.com/blog/blog.11tydata.js/</loc>
+      <lastmod></lastmod>
+    </url>
     <url>
       <loc>https://observablehq.com/@idris-maps/world-countries-1946-2016/</loc>
       <lastmod>2020-05-21</lastmod>
