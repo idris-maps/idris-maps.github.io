@@ -3,18 +3,11 @@
   <title>idris-maps</title>
   <link href="https://idris-maps.com/feed.xml" rel="self"/>
   <link href="https://idris-maps.com/"/>
-  <updated>2020-05-23T11:09:36Z</updated>
+  <updated>2020-05-23T11:15:40Z</updated>
   <id>https://idris-maps.com/</id>
   <author>
     <name>Anders</name>
   </author>
-    <entry>
-      <title></title>
-      <link href="https://idris-maps.com/blog/blog.11tydata.js/"/>
-      <updated>undefinedT00:00:00Z</updated>
-      <id>https://idris-maps.com/blog/blog.11tydata.js/</id>
-      <content type="html"></content>
-    </entry>
     <entry>
       <title>World countries 1946-2016</title>
       <link href="https://observablehq.com/@idris-maps/world-countries-1946-2016/"/>
