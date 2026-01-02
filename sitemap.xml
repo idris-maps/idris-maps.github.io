@@ -2,23 +2,67 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://idris-maps.com/</loc>
-    <lastmod>2020-05-23</lastmod>
+    <lastmod>2026-01-02</lastmod>
   </url>
     <url>
-      <loc>https://observablehq.com/@idris-maps/world-countries-1946-2016/</loc>
-      <lastmod>2020-05-21</lastmod>
+      <loc>https://bengtson.ch/app/ski-map/</loc>
+      <lastmod>2025-04-13</lastmod>
+    </url>
+    <url>
+      <loc>https://github.com/idris-maps/map-components/</loc>
+      <lastmod>2025-04-12</lastmod>
+    </url>
+    <url>
+      <loc>https://bengtson.ch/webcomponents/</loc>
+      <lastmod>2025-01-03</lastmod>
+    </url>
+    <url>
+      <loc>https://github.com/idris-maps/pic-to-tiles/</loc>
+      <lastmod>2024-12-13</lastmod>
+    </url>
+    <url>
+      <loc>https://serea.deno.dev/</loc>
+      <lastmod>2023-05-01</lastmod>
+    </url>
+    <url>
+      <loc>https://bengtson.ch/app/swissle/</loc>
+      <lastmod>2023-01-18</lastmod>
+    </url>
+    <url>
+      <loc>https://github.com/idris-maps/md2epub/</loc>
+      <lastmod>2023-01-04</lastmod>
+    </url>
+    <url>
+      <loc>https://bengtson.ch/app/flowchart/</loc>
+      <lastmod>2022-04-05</lastmod>
+    </url>
+    <url>
+      <loc>https://bengtson.ch/app/epub-reader/</loc>
+      <lastmod>2021-01-10</lastmod>
+    </url>
+    <url>
+      <loc>https://svelte-parts.surge.sh/</loc>
+      <lastmod>2020-11-13</lastmod>
+    </url>
+    <url>
+      <loc>https://code-blocks.surge.sh/</loc>
+      <lastmod>2020-08-29</lastmod>
     </url>
     <url>
       <loc>https://github.com/idris-maps/middle-manager/</loc>
       <lastmod>2020-04-12</lastmod>
     </url>
     <url>
-      <loc>https://svearikes-graenser.surge.sh/</loc>
+      <loc>https://bengtson.ch/app/svea-rikes-graenser/</loc>
       <lastmod>2019-12-18</lastmod>
     </url>
     <url>
       <loc>https://idris-maps.com/blog/create-a-jsx-transpiler/</loc>
       <lastmod>2019-08-23</lastmod>
+    </url>
+    <url>
+      <loc>https://observablehq.com/collection/@idris-maps/heig-visdom-2020</loc>
+      <lastmod>2019-06-10</lastmod>
     </url>
     <url>
       <loc>https://idris-maps.com/blog/tagged-templates/</loc>
@@ -29,27 +73,31 @@
       <lastmod>2019-06-03</lastmod>
     </url>
     <url>
-      <loc>https://baltic-cities.surge.sh/</loc>
+      <loc>https://bengtson.ch/app/baltic-cities/</loc>
       <lastmod>2019-05-01</lastmod>
+    </url>
+    <url>
+      <loc>https://bengtson.ch/app/mapping/</loc>
+      <lastmod>2017-09-10</lastmod>
     </url>
     <url>
       <loc>https://idris-maps.com/blog/leaflet-custom-projection/</loc>
       <lastmod>2017-04-04</lastmod>
     </url>
     <url>
-      <loc>https://going-east.surge.sh/</loc>
+      <loc>https://bengtson.ch/app/eastward/</loc>
       <lastmod>2017-03-17</lastmod>
     </url>
     <url>
-      <loc>https://loud-animals.surge.sh/</loc>
+      <loc>https://bengtson.ch/app/loud-animals/</loc>
       <lastmod>2017-03-12</lastmod>
     </url>
     <url>
-      <loc>http://votations.1866-2016.surge.sh/</loc>
+      <loc>https://bengtson.ch/app/votations/</loc>
       <lastmod>2016-03-20</lastmod>
     </url>
     <url>
-      <loc>https://migrant-crisis.surge.sh/</loc>
+      <loc>https://bengtson.ch/app/migrant-crisis/</loc>
       <lastmod>2016-03-18</lastmod>
     </url>
     <url>
@@ -57,11 +105,11 @@
       <lastmod>2016-02-08</lastmod>
     </url>
     <url>
-      <loc>https://switzerland-3d.surge.sh/</loc>
+      <loc>https://bengtson.ch/app/switzerland-3d/</loc>
       <lastmod>2016-01-31</lastmod>
     </url>
     <url>
-      <loc>https://travel-runestones.surge.sh/</loc>
+      <loc>https://bengtson.ch/app/runestones/</loc>
       <lastmod>2015-11-12</lastmod>
     </url>
     <url>

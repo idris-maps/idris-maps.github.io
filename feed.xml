@@ -3,20 +3,90 @@
   <title>idris-maps</title>
   <link href="https://idris-maps.com/feed.xml" rel="self"/>
   <link href="https://idris-maps.com/"/>
-  <updated>2020-05-23T11:15:40Z</updated>
+  <updated>2026-01-02T17:06:03Z</updated>
   <id>https://idris-maps.com/</id>
   <author>
     <name>Anders</name>
   </author>
     <entry>
-      <title>World countries 1946-2016</title>
-      <link href="https://observablehq.com/@idris-maps/world-countries-1946-2016/"/>
-      <updated>2020-05-21T00:00:00Z</updated>
-      <id>https://observablehq.com/@idris-maps/world-countries-1946-2016/</id>
-      <content type="html">A map of all countries on any day between 1946 and 2016.</content>
+      <title>Swiss ski map</title>
+      <link href="https://bengtson.ch/app/ski-map/"/>
+      <updated>2025-04-13T00:00:00Z</updated>
+      <id>https://bengtson.ch/app/ski-map/</id>
+      <content type="html">Map of swiss ski resorts with slopes, lifts and terrain.</content>
     </entry>
     <entry>
-      <title>middle-manager</title>
+      <title>Map components</title>
+      <link href="https://github.com/idris-maps/map-components/"/>
+      <updated>2025-04-12T00:00:00Z</updated>
+      <id>https://github.com/idris-maps/map-components/</id>
+      <content type="html">Webcomponents wrapping MapLibreGL. Supports &#39;mbtiles&#39; and &#39;pmtiles&#39;.</content>
+    </entry>
+    <entry>
+      <title>Webcomponents</title>
+      <link href="https://bengtson.ch/webcomponents/"/>
+      <updated>2025-01-03T00:00:00Z</updated>
+      <id>https://bengtson.ch/webcomponents/</id>
+      <content type="html">A set of hackable and stylable webcomponents.</content>
+    </entry>
+    <entry>
+      <title>Pic-to-tiles</title>
+      <link href="https://github.com/idris-maps/pic-to-tiles/"/>
+      <updated>2024-12-13T00:00:00Z</updated>
+      <id>https://github.com/idris-maps/pic-to-tiles/</id>
+      <content type="html">Convert a large image to tiles at different zoom levels. To be used with mapping libraries such as leaflet.js.</content>
+    </entry>
+    <entry>
+      <title>Serea</title>
+      <link href="https://serea.deno.dev/"/>
+      <updated>2023-05-01T00:00:00Z</updated>
+      <id>https://serea.deno.dev/</id>
+      <content type="html">Charts, diagrams and graphs for markdown. Defined in code blocks, rendered as inline SVG. No client side script needed. Colors adapt to the document.</content>
+    </entry>
+    <entry>
+      <title>Swissle</title>
+      <link href="https://bengtson.ch/app/swissle/"/>
+      <updated>2023-01-18T00:00:00Z</updated>
+      <id>https://bengtson.ch/app/swissle/</id>
+      <content type="html">Quiz inspired by Worldl but for swiss cantons rather than countries.</content>
+    </entry>
+    <entry>
+      <title>Md2epub</title>
+      <link href="https://github.com/idris-maps/md2epub/"/>
+      <updated>2023-01-04T00:00:00Z</updated>
+      <id>https://github.com/idris-maps/md2epub/</id>
+      <content type="html">Convert a folder with markdown files to a book in the &#39;epub&#39; format.</content>
+    </entry>
+    <entry>
+      <title>Flow chart</title>
+      <link href="https://bengtson.ch/app/flowchart/"/>
+      <updated>2022-04-05T00:00:00Z</updated>
+      <id>https://bengtson.ch/app/flowchart/</id>
+      <content type="html">Web app to draw flow charts with basic syntax ideal for version control.</content>
+    </entry>
+    <entry>
+      <title>Epub reader</title>
+      <link href="https://bengtson.ch/app/epub-reader/"/>
+      <updated>2021-01-10T00:00:00Z</updated>
+      <id>https://bengtson.ch/app/epub-reader/</id>
+      <content type="html">Read books in epub format online. They are saved in localstorage so you can come back and continue reading without having to upload the book again.</content>
+    </entry>
+    <entry>
+      <title>Svelte parts</title>
+      <link href="https://svelte-parts.surge.sh/"/>
+      <updated>2020-11-13T00:00:00Z</updated>
+      <id>https://svelte-parts.surge.sh/</id>
+      <content type="html">Components for svelte.</content>
+    </entry>
+    <entry>
+      <title>Code blocks</title>
+      <link href="https://code-blocks.surge.sh/"/>
+      <updated>2020-08-29T00:00:00Z</updated>
+      <id>https://code-blocks.surge.sh/</id>
+      <content type="html">Render charts, sheet music and math in markdown code blocks for rehype and eleventy.</content>
+    </entry>
+    <entry>
+      <title>Middle manager</title>
       <link href="https://github.com/idris-maps/middle-manager/"/>
       <updated>2020-04-12T00:00:00Z</updated>
       <id>https://github.com/idris-maps/middle-manager/</id>
@@ -24,9 +94,9 @@
     </entry>
     <entry>
       <title>Svea rikes gränser</title>
-      <link href="https://svearikes-graenser.surge.sh/"/>
+      <link href="https://bengtson.ch/app/svea-rikes-graenser/"/>
       <updated>2019-12-18T00:00:00Z</updated>
-      <id>https://svearikes-graenser.surge.sh/</id>
+      <id>https://bengtson.ch/app/svea-rikes-graenser/</id>
       <content type="html">En interaktiv karta över hur Sveriges gränser förändras mellan 1560 och 1815.</content>
     </entry>
     <entry>
@@ -35,6 +105,13 @@
       <updated>2019-08-23T00:00:00Z</updated>
       <id>https://idris-maps.com/blog/create-a-jsx-transpiler/</id>
       <content type="html">Create a JSX transpiler with Typescript in order to have the IDE and compiler tell you which elements and properties are allowed.</content>
+    </entry>
+    <entry>
+      <title>Cours de visualisation de données</title>
+      <link href="https://observablehq.com/collection/@idris-maps/heig-visdom-2020"/>
+      <updated>2019-06-10T00:00:00Z</updated>
+      <id>https://observablehq.com/collection/@idris-maps/heig-visdom-2020</id>
+      <content type="html">Matériel pour un cours de visualisation de données à la haute école d&#39;ingénierie à Yverdon.</content>
     </entry>
     <entry>
       <title>Tagged templates</title>
@@ -52,10 +129,17 @@
     </entry>
     <entry>
       <title>Baltic cities</title>
-      <link href="https://baltic-cities.surge.sh/"/>
+      <link href="https://bengtson.ch/app/baltic-cities/"/>
       <updated>2019-05-01T00:00:00Z</updated>
-      <id>https://baltic-cities.surge.sh/</id>
+      <id>https://bengtson.ch/app/baltic-cities/</id>
       <content type="html">A historical map of the cities around the Baltic sea since 1200.</content>
+    </entry>
+    <entry>
+      <title>Online mapping</title>
+      <link href="https://bengtson.ch/app/mapping/"/>
+      <updated>2017-09-10T00:00:00Z</updated>
+      <id>https://bengtson.ch/app/mapping/</id>
+      <content type="html">An online mapping tool to visualise GeoJSON, draw on a map and download data from OpenStreetMap.</content>
     </entry>
     <entry>
       <title>Leafet custom projection</title>
@@ -66,30 +150,30 @@
     </entry>
     <entry>
       <title>Eastward</title>
-      <link href="https://going-east.surge.sh/"/>
+      <link href="https://bengtson.ch/app/eastward/"/>
       <updated>2017-03-17T00:00:00Z</updated>
-      <id>https://going-east.surge.sh/</id>
+      <id>https://bengtson.ch/app/eastward/</id>
       <content type="html">About the Norse expansion to the East and the Rus state.</content>
     </entry>
     <entry>
       <title>Loud animals</title>
-      <link href="https://loud-animals.surge.sh/"/>
+      <link href="https://bengtson.ch/app/loud-animals/"/>
       <updated>2017-03-12T00:00:00Z</updated>
-      <id>https://loud-animals.surge.sh/</id>
+      <id>https://bengtson.ch/app/loud-animals/</id>
       <content type="html">An interactive kids &#39;book&#39;. Made for my nieces that are not allowed to use computers.</content>
     </entry>
     <entry>
       <title>Votations</title>
-      <link href="http://votations.1866-2016.surge.sh/"/>
+      <link href="https://bengtson.ch/app/votations/"/>
       <updated>2016-03-20T00:00:00Z</updated>
-      <id>http://votations.1866-2016.surge.sh/</id>
+      <id>https://bengtson.ch/app/votations/</id>
       <content type="html">Cartes des résultats de toutes les votations fédérales depuis 1866 par canton.</content>
     </entry>
     <entry>
       <title>The EU migrant crisis</title>
-      <link href="https://migrant-crisis.surge.sh/"/>
+      <link href="https://bengtson.ch/app/migrant-crisis/"/>
       <updated>2016-03-18T00:00:00Z</updated>
-      <id>https://migrant-crisis.surge.sh/</id>
+      <id>https://bengtson.ch/app/migrant-crisis/</id>
       <content type="html">Data visualisations putting the 2015 crisis in context.</content>
     </entry>
     <entry>
@@ -101,16 +185,16 @@
     </entry>
     <entry>
       <title>Switzerland 3d</title>
-      <link href="https://switzerland-3d.surge.sh/"/>
+      <link href="https://bengtson.ch/app/switzerland-3d/"/>
       <updated>2016-01-31T00:00:00Z</updated>
-      <id>https://switzerland-3d.surge.sh/</id>
+      <id>https://bengtson.ch/app/switzerland-3d/</id>
       <content type="html">Playing around with three.js and elevation data.</content>
     </entry>
     <entry>
       <title>Runestones</title>
-      <link href="https://travel-runestones.surge.sh/"/>
+      <link href="https://bengtson.ch/app/runestones/"/>
       <updated>2015-11-12T00:00:00Z</updated>
-      <id>https://travel-runestones.surge.sh/</id>
+      <id>https://bengtson.ch/app/runestones/</id>
       <content type="html">A map of the runestones about travels outside of Scandinavia.</content>
     </entry>
     <entry>
